@@ -1,0 +1,21 @@
+{
+  "name": "proyectocrud",
+  "version": "1.0.0",
+  "description": "Proyecto CRUD de prueba.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "crud"
+  ],
+  "author": "Jesús Aceves Barco",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.7",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.4"
+  }
+}

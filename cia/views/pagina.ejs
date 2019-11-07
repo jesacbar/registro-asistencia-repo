@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>Document</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark">
+            <a href="/">CIA</a>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <form action="/agregarClase" method="POST">
+                    <input type="text" name="id" placeholder="Ingresa el ID" class="form-control"/><br>
+                    <input type="text" name="nombreMateria" placeholder="Ingresa el nombre de la materia" class="form-control"/><br>
+                    <input type="text" name="idProfesor" placeholder="Ingresa el ID del profesor" class="form-control"/><br>
+                    <input type="text" name="aula" placeholder="Ingresa el aula" class="form-control"/><br>
+                    <input type="text" name="horaInicio" placeholder="Ingresa la hora de inicio" class="form-control"/><br>
+                    <input type="text" name="horaFin" placeholder="Ingresa la hora de fin" class="form-control"/><br>
+                    <input type="submit" class="btn btn-primary"/>
+                </form>
+            </div>
+        </div>
+        <br>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <th>ID</th>
+                <th>Nombre de la materia</th>
+                <th>ID del profesor</th>
+                <th>Aula</th>
+                <th>Hora de inicio</th>
+                <th>Hora de fin</th>
+                <th>Acción</th>
+            </thead>
+            <tbody>
+                <% for(var i=0; i < listaClases.length; i++) { %>
+                    <tr>
+                        <td> <%=listaClases[i].id%> </td>
+                        <td> <%=listaClases[i].nombreMateria%> </td>
+                        <td> <%=listaClases[i].idProfesor%> </td>
+                        <td> <%=listaClases[i].aula%> </td>
+                        <td> <%=listaClases[i].horaInicio%> </td>
+                        <td> <%=listaClases[i].horaFin%> </td>
+                        <td>
+                            <a href="" class = "btn btn-dark">Aprobar</a>
+                            <a href="/eliminaClase/<%=listaClases[i]._id%>" class="btn btn-danger">Eliminar</a>
+                            <a href="" class = "btn btn-success">Editar</a>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </body>
+</html>
