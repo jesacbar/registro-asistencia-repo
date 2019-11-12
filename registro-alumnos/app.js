@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const indexRoutes = require("./routes/index");
 
 // Conectar a BD
-mongoose.connect("mongodb://localhost/cia" , {
+mongoose.connect("mongodb://localhost/registro-alumnos" , {
     useNewUrlParser: true,
     useCreateIndex: true,
 })
@@ -27,6 +27,6 @@ app.use(express.json());
 app.use("/", indexRoutes);
 
 // Inicio de servidor
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log("Servidor en puerto 3000.");
 });

@@ -45,9 +45,8 @@
                         <td> <%=listaClases[i].horaInicio%> </td>
                         <td> <%=listaClases[i].horaFin%> </td>
                         <td>
-                            <a href="" class = "btn btn-dark">Aprobar</a>
-                            <a href="/eliminaClase/<%=listaClases[i]._id%>" class="btn btn-danger">Eliminar</a>
-                            <a href="" class = "btn btn-success">Editar</a>
+                            <a href="/eliminarClase/<%=listaClases[i]._id%>" class="btn btn-danger">Eliminar</a>
+                            <a href="" class = "btn btn-success" hidden>Editar</a>
                         </td>
                     </tr>
                 <% } %>

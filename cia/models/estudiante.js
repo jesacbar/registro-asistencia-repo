@@ -3,11 +3,8 @@ const Esquema = mongoose.Schema;
 
 const estEsquema = new Esquema({
     id: String,
-    nombre: String,
-    aprobado: {
-        type: Boolean,
-        default: false
-    }
+    pass: String,
+    nombre: String
 });
 
 module.exports = mongoose.model("estudiantes", estEsquema);
