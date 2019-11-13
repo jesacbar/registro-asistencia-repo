@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Clase = require("../models/clase");
 const Profesor = require("../models/profesor");
+const Estudiante = require("../models/estudiante");
 const auth = require("../middleware/auth");
 
 router.get("/", async (req, res) => {
@@ -10,15 +11,19 @@ router.get("/", async (req, res) => {
     res.render("pagina", {listaClases});
 });
 
-router.post("/agregarAlumno", async (req, res) => {
-    //console.log(req.body)
-    var e = new Estudiante(req.body);
+router.post("/agregarClase", async (req, res) => {
+    var e = new Clase(req.body);
     await e.save();
     res.redirect("/");
 });
 
+router.get("/eliminarClase/:id", async (req, res) => {
+    const {id} = req.params;
+    await Clase.remove({_id:id});
+    res.redirect("/");
+});
+
 router.post('/profesores', async (req, res) => {
-    // 
     try {
         const profesor = new Profesor(req.body)
         console.log(profesor);
@@ -29,6 +34,33 @@ router.post('/profesores', async (req, res) => {
         res.status(400).send(error)
     }
 })
+
+router.get('/profesores/me', auth, async(req, res) => {
+    res.send(req.profesor)
+})
+
+router.get('/clases/', auth, async(req, res) => {
+    const listaClases = await Clase.find();
+    res.send(listaClases);
+});
+
+router.get('/estudiantes/', auth, async(req, res) => {
+    const listaEstudiantes = await Estudiante.find();
+    res.send(listaEstudiantes);
+});
+
+router.post('/estudiantes/', auth, async(req, res) => {
+    try {
+        const estudiante = new Estudiante(req.body)
+        console.log(estudiante);
+        await estudiante.save()
+        //const token = await estudiante.generateAuthToken()
+        //res.status(201).send({ estudiante, token })
+        res.status(201).send({ estudiante })
+    } catch (error) {
+        res.status(400).send(error)
+    }
+});
 
 router.post('/profesores/login', async (req, res) => {
     try {
@@ -43,23 +75,6 @@ router.post('/profesores/login', async (req, res) => {
         console.log(error)
         res.status(400).send(error)
     }
-});
-
-router.get('/profesores/me', auth, async(req, res) => {
-    res.send(req.profesor)
-})
-
-router.get("/eliminarClase/:id", async (req, res) => {
-    const {id} = req.params;
-    await Clase.remove({_id:id});
-    res.redirect("/");
-});
-
-router.post("/agregarClase", async (req, res) => {
-    //console.log(req.body)
-    var e = new Clase(req.body);
-    await e.save();
-    res.redirect("/");
 });
 
 router.post("/profesores/me/logout", auth, async (req, res) => {
