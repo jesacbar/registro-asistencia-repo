@@ -7,11 +7,11 @@ const auth = require("../middleware/auth");
 // Agregar elementos del stub a la base de datos
 
 router.get("/generarstub", async(req, res) => {
-    usuario1 = new Usuario({ id: "00000000001", password: "123", nombre: "Edgar Fulano"});
-    usuario2 = new Usuario({ id: "00000000002", password: "123", nombre: "Pedro Asola"});
-    usuario3 = new Usuario({ id: "00000000003", password: "123", nombre: "Gilberto Borrego"});
-    usuario4 = new Usuario({ id: "00000000004", password: "123", nombre: "Juan Taplio"});
-    usuario5 = new Usuario({ id: "00000000005", password: "123", nombre: "Lucas Marcos"});
+    usuario1 = new Usuario({ id: "00000000001", password: "123", nombre: "Edgar Fulano", clases: ["0001", "0002", "0005"]});
+    usuario2 = new Usuario({ id: "00000000002", password: "123", nombre: "Pedro Asola", clases: ["0002", "0003", "0004"]});
+    usuario3 = new Usuario({ id: "00000000003", password: "123", nombre: "Gilberto Borrego", clases: ["0002", "0004"]});
+    usuario4 = new Usuario({ id: "00000000004", password: "123", nombre: "Juan Taplio", clases: ["0001", "0002", "0003", "0004" ,"0005"]});
+    usuario5 = new Usuario({ id: "00000000005", password: "123", nombre: "Lucas Marcos", clases: ["0004"]});
 
     clase1 = new Clase({ id: "0001",
                         nombre: "Topico 1: Temas emergentes",
@@ -37,7 +37,7 @@ router.get("/generarstub", async(req, res) => {
                         aula: "LV1801",
                         horaInicio: "10:00:00 a. m.",
                         horaFin: "11:00:00 a. m."});
-    clase5 = new Clase({ id: "00005",
+    clase5 = new Clase({ id: "0005",
                         nombre: "Topico 2: Introducción IoT",
                         idProfesor: "00000000003",
                         aula: "AV1804",
@@ -63,10 +63,16 @@ router.get("/generarstub", async(req, res) => {
 
 // Rutas de usuarios
 
-router.get("/usuarios", async (req, res) => {
+router.get("/usuarios", auth, async (req, res) => {
     const listaUsuarios = await Usuario.find();
     res.send(listaUsuarios);
 });
+
+router.get('/usuarios/:id', async(req, res) => {
+    var id = req.params.id;
+    const usuario = await Usuario.findOne({id: id});
+    res.send(usuario);
+})
 
 router.post('/usuarios', async (req, res) => {
     try {
@@ -127,5 +133,11 @@ router.get('/clases/', async(req, res) => {
     const listaClases = await Clase.find();
     res.send(listaClases);
 });
+
+router.get('/clases/:id', async(req, res) => {
+    var id = req.params.id;
+    const clase = await Clase.findOne({id: id});
+    res.send(clase);
+})
 
 module.exports = router;

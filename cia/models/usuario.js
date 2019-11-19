@@ -8,9 +8,7 @@ const usuarioEsquema = new Esquema({
     password: String,
     nombre: String,
     esProfesor: Boolean,
-    clases: [{
-        claseId: String
-    }],
+    clases: [String],
     tokens: [{
         token: {
             type: String,
@@ -40,16 +38,17 @@ usuarioEsquema.methods.generateAuthToken = async function() {
 
 usuarioEsquema.statics.findByCredentials = async (id, password) => {
     // 
-    const usuario = await usuario.findOne({id} )
-    console.log(usuario.password)
-    if (!usuario) {
-        throw new Error({ error: 'Credenciales de acceso inválidas' })
+    const usuarioEncontrado = await usuario.findOne({id} )
+    if (!usuarioEncontrado) {
+        //throw new Error({ error: 'Credenciales de acceso inválidas' })
+        return null;
     }
-    const isPasswordMatch = await bcrypt.compare(password, usuario.password)
+    const isPasswordMatch = await bcrypt.compare(password, usuarioEncontrado.password)
     if (!isPasswordMatch) {
-        throw new Error({ error: 'Credenciales de acceso inválidas' })
+        //throw new Error({ error: 'Credenciales de acceso inválidas' })
+        return null;
     }
-    return usuario;
+    return usuarioEncontrado;
 }
 
 const usuario = mongoose.model('usuarios', usuarioEsquema)
