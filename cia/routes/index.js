@@ -4,14 +4,35 @@ const Usuario = require("../models/usuario");
 const Clase = require("../models/clase");
 const auth = require("../middleware/auth");
 
-// Agregar elementos del stub a la base de datos
-
+// Al hacer esta petición se generan varios alumnos y clases para pruebas
+// del sistema.
 router.get("/generarstub", async(req, res) => {
-    usuario1 = new Usuario({ id: "00000000001", password: "123", nombre: "Edgar Fulano", clases: ["0001", "0002", "0005"]});
-    usuario2 = new Usuario({ id: "00000000002", password: "123", nombre: "Pedro Asola", clases: ["0002", "0003", "0004"]});
-    usuario3 = new Usuario({ id: "00000000003", password: "123", nombre: "Gilberto Borrego", clases: ["0002", "0004"]});
-    usuario4 = new Usuario({ id: "00000000004", password: "123", nombre: "Juan Taplio", clases: ["0001", "0002", "0003", "0004" ,"0005"]});
-    usuario5 = new Usuario({ id: "00000000005", password: "123", nombre: "Lucas Marcos", clases: ["0004"]});
+    usuario1 = new Usuario({ id: "00000000001", password: "123", nombre: "Edgar Fulano", esProfesor: true });
+    usuario2 = new Usuario({ id: "00000000002", password: "123", nombre: "Pedro Asola", esProfesor: true });
+    usuario3 = new Usuario({ id: "00000000003", password: "123", nombre: "Gilberto Borrego", esProfesor: true });
+    usuario4 = new Usuario({ id: "00000000004", password: "123", nombre: "Juan Taplio", esProfesor: true });
+    usuario5 = new Usuario({ id: "00000000005", password: "123", nombre: "Lucas Marcos", esProfesor: true });
+
+    usuario6 = new Usuario({ id: "00000164812", 
+                             password: "123", 
+                             nombre: "Jesús Aceves Barco", 
+                             esProfesor: false, 
+                             clases: ["0001", "0002", "0005"] });
+    usuario7 = new Usuario({ id: "00000164758", 
+                             password: "123", 
+                             nombre: "Jesús Manuel Almada Aragón", 
+                             esProfesor: false, 
+                             clases: ["0002", "0003", "0004"] });
+    usuario8 = new Usuario({ id: "00000165454", 
+                             password: "123", 
+                             nombre: "Joel Ramón Luna Valenzuela", 
+                             esProfesor: false, 
+                             clases: ["0002", "0004"] });
+    usuario9 = new Usuario({ id: "00000148548", 
+                             password: "123", 
+                             nombre: "Fernando Alberto Rodríguez Vega", 
+                             esProfesor: false, 
+                             clases: ["0001", "0002", "0003", "0004" ,"0005"] });
 
     clase1 = new Clase({ id: "0001",
                         nombre: "Topico 1: Temas emergentes",
@@ -50,6 +71,10 @@ router.get("/generarstub", async(req, res) => {
         await usuario3.save();
         await usuario4.save();
         await usuario5.save();
+        await usuario6.save();
+        await usuario7.save();
+        await usuario8.save();
+        await usuario9.save();
         await clase1.save();
         await clase2.save();
         await clase3.save();
@@ -61,19 +86,23 @@ router.get("/generarstub", async(req, res) => {
     }
 });
 
-// Rutas de usuarios
+// --- Rutas de usuarios ---
 
+// Regresa todos los usuarios registrados en la BD.
 router.get("/usuarios", auth, async (req, res) => {
     const listaUsuarios = await Usuario.find();
     res.send(listaUsuarios);
 });
 
+// Regresa el usuario cuya ID coincide con la que se le pasa
+// en la URL.
 router.get('/usuarios/:id', async(req, res) => {
     var id = req.params.id;
     const usuario = await Usuario.findOne({id: id});
     res.send(usuario);
 })
 
+// Ingresa el usuario que se le pase en el cuerpo de la petición.
 router.post('/usuarios', async (req, res) => {
     try {
         const usuario = new Usuario(req.body)
@@ -86,10 +115,17 @@ router.post('/usuarios', async (req, res) => {
     }
 })
 
+// Regresa los datos del usuario cuyo token se le mande como encabezado
+// de Autorization.
 router.get('/usuarios/yo', auth, async(req, res) => {
     res.send(req.usuario)
 })
 
+// Identifica a un usuario dado un ID y una contraseña que se le pasen
+// en el cuerpo de la petición. En caso de ser datos de ingreso válidos
+// se genera un token,  y se regresan los datos del usuario y el token generado.
+// El token regresado se puede usar para poder hacer peticiones a las rutas
+// protegidas de esta apliación.
 router.post('/usuarios/login', async (req, res) => {
     try {
         const { id, password } = req.body
@@ -105,7 +141,9 @@ router.post('/usuarios/login', async (req, res) => {
     }
 });
 
-router.post("/usuarios/me/logout", auth, async (req, res) => {
+// Desacopla el token que se le pase como encabezado "Autorization" de la petición 
+// del usuario al que pertenece.
+router.post("/usuarios/yo/logout", auth, async (req, res) => {
     try {
         req.usuario.tokens = req.usuario.tokens.filter((token) => {
             return token.token != req.token
@@ -117,7 +155,9 @@ router.post("/usuarios/me/logout", auth, async (req, res) => {
     }
 });
 
-router.post('/usuarios/me/logoutall', auth, async(req, res) => {
+// Desacopla todos los tokes que pertenecen al usuario que tiene el
+// token que se le pase como encabezado "Autorization".
+router.post('/usuarios/yo/logouttodos', auth, async(req, res) => {
     try {
         req.usuario.tokens.splice(0, req.usuario.tokens.length)
         await req.usuario.save()
@@ -127,13 +167,16 @@ router.post('/usuarios/me/logoutall', auth, async(req, res) => {
     }
 })
 
-// Rutas de clases
+// --- Rutas de clases ---
 
+// Regresa todas las clases registradas en la BD.
 router.get('/clases/', async(req, res) => {
     const listaClases = await Clase.find();
     res.send(listaClases);
 });
 
+// Regresa la clase cuya ID coincide con la que se le pasa
+// en la URL.
 router.get('/clases/:id', async(req, res) => {
     var id = req.params.id;
     const clase = await Clase.findOne({id: id});
