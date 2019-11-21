@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 import LoginForm from './components/LoginForm'
 import TablaClasesAlumno from './components/TablaClasesAlumno';
+import TablaClasesMaestro from './components/TablaClasesMaestro';
 
 var request = require('request');
 
@@ -23,13 +24,10 @@ class App extends Component {
             if (!error && response.statusCode === 200) {
               localStorage.setItem("usuario", JSON.stringify(body.usuario));
               localStorage.setItem("token", body.token);
-              console.log(localStorage.getItem("token"))
               this.setState({
                 usuario: JSON.parse(localStorage.getItem("usuario")),
                 token: localStorage.getItem("token")
               })
-              console.log(this.state.token)
-              console.log(this.state.usuario)
             } else {
               console.log("Error al iniciar sesión")
             }
@@ -87,7 +85,7 @@ class App extends Component {
         <Route exact path="/listadoClasesAlumno" render={() => {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === false) {
             return <div>
-              <h1>Listado de clases</h1>
+          <h1>Listado de clases</h1>
               <TablaClasesAlumno token={this.state.token} clases={this.state.usuario.clases}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
@@ -103,6 +101,7 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === true) {
             return <div>
               <h1>Listado de clases</h1>
+              <TablaClasesMaestro token={this.state.token} id={this.state.usuario.id}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>

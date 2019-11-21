@@ -181,6 +181,12 @@ router.get('/clases/:id', async(req, res) => {
     var id = req.params.id;
     const clase = await Clase.findOne({id: id});
     res.send(clase);
-})
+});
+
+router.get('/clases/maestro/:id', async(req, res) => {
+    var idProfesor = req.params.id;
+    const clases = await Clase.find({idProfesor: idProfesor});
+    res.send(clases);
+});
 
 module.exports = router;
