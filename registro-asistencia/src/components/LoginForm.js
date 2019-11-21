@@ -31,7 +31,7 @@ export default class LoginForm extends Component {
                 <br/>
                 <br/>
                 <input 
-                    type="text" 
+                    type="password" 
                     name="password"
                     placeholder="Ingresa tu contraseña" 
                     onChange={this.onChange} 

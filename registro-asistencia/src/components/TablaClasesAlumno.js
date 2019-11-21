@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-export default class ListadoClasesAlumno extends Component {
+import ListaClasesAlumno from './ListaClasesAlumno';
+
+export default class TablaClasesAlumno extends Component {
 
     render() {
         return (
@@ -15,8 +18,15 @@ export default class ListadoClasesAlumno extends Component {
                             <th width="100">Marcar asistencia</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        <ListaClasesAlumno token={this.props.token} clases={this.props.clases}/>
+                    </tbody>
                 </table>
             </div>
         );
     };
+};
+
+TablaClasesAlumno.propTypes = {
+    clases: PropTypes.array.isRequired
 };

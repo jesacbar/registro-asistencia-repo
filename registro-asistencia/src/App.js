@@ -4,7 +4,7 @@ import logo from './itson.png';
 import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 import LoginForm from './components/LoginForm'
-import ListadoClasesAlumno from './components/ListadoClasesAlumno';
+import TablaClasesAlumno from './components/TablaClasesAlumno';
 
 var request = require('request');
 
@@ -19,10 +19,11 @@ class App extends Component {
     request.post( 
         'http://localhost:2000/usuarios/login',
         { json: { id: id, password: password } },
-        (error, response, body) => {
+        async (error, response, body) => {
             if (!error && response.statusCode === 200) {
               localStorage.setItem("usuario", JSON.stringify(body.usuario));
               localStorage.setItem("token", body.token);
+              console.log(localStorage.getItem("token"))
               this.setState({
                 usuario: JSON.parse(localStorage.getItem("usuario")),
                 token: localStorage.getItem("token")
@@ -62,6 +63,7 @@ class App extends Component {
   };
 
   render() {
+    //localStorage.clear();
     return <div>
       <Router>
         {/*Pantalla de login*/}
@@ -86,7 +88,7 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === false) {
             return <div>
               <h1>Listado de clases</h1>
-              <ListadoClasesAlumno/>
+              <TablaClasesAlumno token={this.state.token} clases={this.state.usuario.clases}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>

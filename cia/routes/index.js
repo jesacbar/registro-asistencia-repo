@@ -115,11 +115,11 @@ router.post('/usuarios', async (req, res) => {
     }
 })
 
-// Regresa los datos del usuario cuyo token se le mande como encabezado
-// de Autorization.
+/* 
 router.get('/usuarios/yo', auth, async(req, res) => {
     res.send(req.usuario)
 })
+*/
 
 // Identifica a un usuario dado un ID y una contraseña que se le pasen
 // en el cuerpo de la petición. En caso de ser datos de ingreso válidos
