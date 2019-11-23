@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import ListaClasesProfesor from './ListaClasesProfesor';
+import ListaClasesMaestro from './ListaClasesMaestro';
 
-export default class TablaClasesProfesor extends Component {
+export default class TablaClasesMaestro extends Component {
 
     render() {
         return (
@@ -19,7 +19,7 @@ export default class TablaClasesProfesor extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <ListaClasesProfesor token={this.props.token} id={this.props.id}/>
+                        <ListaClasesMaestro token={this.props.token} id={this.props.id}/>
                     </tbody>
                 </table>
             </div>
@@ -27,6 +27,6 @@ export default class TablaClasesProfesor extends Component {
     };
 };
 
-TablaClasesProfesor.propTypes = {
+TablaClasesMaestro.propTypes = {
     id: PropTypes.string.isRequired
 };

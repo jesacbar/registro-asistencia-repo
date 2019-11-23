@@ -183,9 +183,7 @@ router.get('/clases/:id', async(req, res) => {
     res.send(clase);
 });
 
-// Regresa todas las clases impartidas por el profesor cuya
-// ID coincida con la que se le pase como parámetro.
-router.get('/clases/profesor/:id', async(req, res) => {
+router.get('/clases/maestro/:id', async(req, res) => {
     var idProfesor = req.params.id;
     const clases = await Clase.find({idProfesor: idProfesor});
     res.send(clases);

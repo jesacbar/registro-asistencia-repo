@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import ListadoClaseProfesor from './ListadoClaseProfesor';
+import Test from './Test';
 
 var request = require('request');
 
-export default class ListaClasesProfesor extends Component {
+export default class ListadoClaseMaestro extends Component {
 
     state = {
         clases: null
@@ -17,7 +17,7 @@ export default class ListaClasesProfesor extends Component {
     }
 
     obtenerClase = (token, idProfesor) => {
-        var url = 'http://localhost:2000/clases/profesor/' + idProfesor;
+        var url = 'http://localhost:2000/clases/maestro/' + idProfesor;
 
         const options = {
             url: url,
@@ -39,22 +39,16 @@ export default class ListaClasesProfesor extends Component {
 
     render() {
         if (this.state.clases === null) {
-            return <tr>
-            <td>Cargando</td>
-            <td>Cargando</td>
-            <td>Cargando</td>
-            <td>Cargando</td>
-            <td><button>Registrar asistencia</button></td>
-        </tr>
+            return <h1>"jojo"</h1>
         } else {
             return this.state.clases.map(clase => 
-                <ListadoClaseProfesor clase={clase}/>     
+                <Test clase={clase}/>     
             ) 
         }
     }
 };
 
-ListaClasesProfesor.propTypes = {
+ListadoClaseMaestro.propTypes = {
     token: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired
 };
