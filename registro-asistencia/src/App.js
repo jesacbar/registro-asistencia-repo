@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 
 import LoginForm from './components/LoginForm'
 import TablaClasesAlumno from './components/TablaClasesAlumno';
-import TablaClasesMaestro from './components/TablaClasesMaestro';
+import TablaClasesProfesor from './components/TablaClasesProfesor';
 
 var request = require('request');
 
@@ -13,7 +13,8 @@ class App extends Component {
 
   state = {
     usuario: JSON.parse(localStorage.getItem("usuario")),
-    token: localStorage.getItem("token")
+    token: localStorage.getItem("token"),
+    error: ''
   };
   
   identificarse = (id, password) => {
@@ -26,10 +27,13 @@ class App extends Component {
               localStorage.setItem("token", body.token);
               this.setState({
                 usuario: JSON.parse(localStorage.getItem("usuario")),
-                token: localStorage.getItem("token")
+                token: localStorage.getItem("token"),
+                error: ""
               })
             } else {
-              console.log("Error al iniciar sesión")
+              this.setState({
+                error: "Error al iniciar sesión: Verifica tus datos de ingreso."
+              })
             }
         }
     );
@@ -77,7 +81,7 @@ class App extends Component {
             <div className="imgcontainer">
               <img src={logo} alt="Avatar" className="avatar"/>
             </div>
-            <LoginForm identificarse={this.identificarse}/>
+            <LoginForm identificarse={this.identificarse} error={this.state.error}/>
           </div>
         }}> 
         </Route>
@@ -101,7 +105,7 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === true) {
             return <div>
               <h1>Listado de clases</h1>
-              <TablaClasesMaestro token={this.state.token} id={this.state.usuario.id}/>
+              <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>
