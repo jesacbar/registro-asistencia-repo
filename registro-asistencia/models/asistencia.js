@@ -8,4 +8,4 @@ const asistEsquema = new Esquema({
     estado: String
 });
 
-module.exports = mongoose.model("asistencias", estEsquema);
+module.exports = mongoose.model("asistencias", asistEsquema);

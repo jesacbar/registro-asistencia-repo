@@ -27,6 +27,6 @@ app.use(express.json());
 app.use("/", indexRoutes);
 
 // Inicio de servidor
-app.listen(4000, () => {
-    console.log("Servidor en puerto 3000.");
+app.listen(5000, () => {
+    console.log("Servidor en puerto 5000.");
 });
