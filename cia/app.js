@@ -35,5 +35,5 @@ app.use("/", indexRoutes);
 
 // Inicio de servidor
 app.listen(2000, () => {
-    console.log("Servidor en puerto 2000.");
+    console.log("Servidor de \"cia\" iniciado en puerto 2000.");
 });

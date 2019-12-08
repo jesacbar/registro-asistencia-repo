@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const schedule = require("node-schedule");
 
 const indexRoutes = require("./routes/index");
 
@@ -26,7 +27,11 @@ app.use(express.json());
 // Rutas
 app.use("/", indexRoutes);
 
+// var j = schedule.scheduleJob('*/1 * * * *', function(){
+//     console.log('Esto nos va a servir en el futuro no muy lejano');
+// });
+
 // Inicio de servidor
 app.listen(5000, () => {
-    console.log("Servidor en puerto 5000.");
+    console.log("Servidor de \"registro-asistencia-rest\" iniciado en puerto 5000.");
 });
