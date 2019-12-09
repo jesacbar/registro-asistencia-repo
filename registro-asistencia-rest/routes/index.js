@@ -8,7 +8,7 @@ const randomstring = require("randomstring");
 const moment = require('moment');
 
 var conexiones = new Map();
-var codigosClase = new Map();
+var clases = new Map();
 
 const server = http.createServer();
 const puertoSocket = 7000;
@@ -36,8 +36,8 @@ wsServer.on('request', function (request) {
         var horaInicioPartes = horaInicioString.split(':');
         var horaFinPartes = horaFinString.split(':');
 
-        var horaInicio = moment().set({ 'hour': parseInt(horaInicioPartes[0]), 'minute': parseInt(horaInicioPartes[1]) });
-        var horaFin = moment().set({ 'hour': parseInt(horaFinPartes[0]), 'minute': parseInt(horaFinPartes[1]) });
+        var horaInicio = moment().set({ 'hour': parseInt(horaInicioPartes[0]), 'minute': parseInt(horaInicioPartes[1]), 'seconds': 0});
+        var horaFin = moment().set({ 'hour': parseInt(horaFinPartes[0]), 'minute': parseInt(horaFinPartes[1]), 'seconds': 0 });
 
         conexiones.set(conexion, idClase);
 
@@ -47,18 +47,23 @@ wsServer.on('request', function (request) {
             // Si no está registrada la clase en el mapa de
             // codigos de clase, generar un código para esa
             // clase y registrarla.
-            if (!codigosClase.has(idClase)) {
+            if (!clases.has(idClase)) {
                 console.log("<Proceso de generar codigos iniciado>")
                 var codigo = randomstring.generate({ length: 5, charset: "numeric" });
-                codigosClase.set(idClase, codigo);
+                var clase = {
+                    horaInicio: horaInicio,
+                    horaFin: horaFin,
+                    codigo: codigo
+                };
+                clases.set(idClase, clase);
                 console.log("Se generó un código de clase.");
                 console.log(codigo);
             }
 
-            conexion.sendUTF(codigosClase.get(idClase));
+            conexion.sendUTF(clases.get(idClase).codigo);
             console.log("Se mandó código de clase.")
         } else {
-            conexion.sendUTF("Aún no es la hora de la clase.");
+            conexion.sendUTF("Aún no es la hora de la clase");
             console.log("Se mandó notificación de que aún no es la hora de la clase.")
         };
 
@@ -73,15 +78,27 @@ wsServer.on('request', function (request) {
 // que lo han solicitado.
 generarCodigoTarea = schedule.scheduleJob('*/1 * * * *', function () {
     console.log('<Tarea de generar claves iniciada>');
-    for (var [idClase, codigo] of codigosClase) {
-        var codigoNuevo = randomstring.generate({ length: 5, charset: "numeric" });
-        codigosClase.set(idClase, codigoNuevo);
-        console.log("Clase: " + idClase + " Código: " + codigoNuevo);
-        for (var [conexion, idClaseConexion] of conexiones) {
-            if (idClaseConexion === idClase) {
-                conexion.sendUTF(codigoNuevo);
-                console.log(codigoNuevo);
+    for (var [idClase, clase] of clases) {
+        if (moment().isBetween(clase.horaInicio, clase.horaFin.subtract(1, 'minute'))) {
+            var codigoNuevo = randomstring.generate({ length: 5, charset: "numeric" });
+            clases.get(idClase).codigo = codigoNuevo;
+            console.log("Clase: " + idClase + " Código: " + codigoNuevo);
+            for (var [conexion, idClaseConexion] of conexiones) {
+                if (idClaseConexion === idClase) {
+                    conexion.sendUTF(codigoNuevo);
+                    console.log(codigoNuevo);
+                };
             };
+        } else {
+            for (var [conexion, idClaseConexion] of conexiones) {
+                if (idClaseConexion === idClase) {
+                    conexion.sendUTF("Se acabó la hora de la clase");
+                    conexiones.delete(conexion);
+                    conexion.close();
+                };
+            };
+            clases.delete(idClase);
+            console.log("Se quitó una clase del listado de clases")
         };
     };
 });

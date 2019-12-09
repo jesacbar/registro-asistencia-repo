@@ -109,7 +109,19 @@ router.get('/usuarios/:id', async(req, res) => {
     var id = req.params.id;
     const usuario = await Usuario.findOne({id: id});
     res.send(usuario);
-})
+});
+
+// Regresa todos los usuarios que estén registrados en la
+// clase cuya id coincida con el parámetro.
+router.get('/usuarios/clase/:id', async(req, res) => {
+    var idClase = req.params.id;
+    var usuariosClase = await Usuario.find(
+        {
+            clases: idClase
+        }
+    );
+    res.send(usuariosClase);
+});
 
 // Ingresa el usuario que se le pase en el cuerpo de la petición.
 router.post('/usuarios', async (req, res) => {
@@ -121,8 +133,8 @@ router.post('/usuarios', async (req, res) => {
         res.status(201).send({ usuario, token })
     } catch (error) {
         res.status(400).send(error)
-    }
-})
+    };
+});
 
 /* 
 router.get('/usuarios/yo', auth, async(req, res) => {

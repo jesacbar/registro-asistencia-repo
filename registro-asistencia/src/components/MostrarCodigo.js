@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import ListaClasesProfesor from './ListaClasesProfesor';
 
 export default class MostrarCodigo extends Component {
 
@@ -29,7 +31,23 @@ export default class MostrarCodigo extends Component {
     render() {
         return (
             <div>
-                <h1>{this.state.codigo}</h1>
+                <h1 style={{textAlign: "center"}}>{this.state.codigo}</h1>
+                <table className="materias" id="materias" align="center" border="1" cellPadding="2" >
+                    <thead>
+                        <tr>
+                            <th width="150">ID</th>
+                            <th width="300">Nombre</th>
+                            <th width="200">Estado</th>
+                            <th width="200">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ListaClasesProfesor token={this.props.token} id={this.props.id} mostrarCodigo={this.props.mostrarCodigo}/>
+                    </tbody>
+                </table>
+                <Link to="/listadoClasesProfesor">
+                    <button>Regresar al listado de clases</button>
+                </Link>
             </div>
         );
     };
