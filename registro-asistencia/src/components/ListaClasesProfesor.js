@@ -48,7 +48,7 @@ export default class ListaClasesProfesor extends Component {
         </tr>
         } else {
             return this.state.clases.map(clase => 
-                <ListadoClaseProfesor clase={clase}/>     
+                <ListadoClaseProfesor key={clase.id} clase={clase} mostrarCodigo={this.props.mostrarCodigo}/>     
             ) 
         }
     }
@@ -56,5 +56,6 @@ export default class ListaClasesProfesor extends Component {
 
 ListaClasesProfesor.propTypes = {
     token: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    mostrarCodigo: PropTypes.func.isRequired
 };

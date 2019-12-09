@@ -15,11 +15,11 @@ export default class TablaClasesProfesor extends Component {
                             <th width="100">Aula</th>
                             <th width="200">Hora inicio</th>
                             <th width="200">Hora fin</th>
-                            <th width="100">Verificar Asistencia</th>
+                            <th width="100">Código de clase</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <ListaClasesProfesor token={this.props.token} id={this.props.id}/>
+                        <ListaClasesProfesor token={this.props.token} id={this.props.id} mostrarCodigo={this.props.mostrarCodigo}/>
                     </tbody>
                 </table>
             </div>
@@ -28,5 +28,7 @@ export default class TablaClasesProfesor extends Component {
 };
 
 TablaClasesProfesor.propTypes = {
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+    mostrarCodigo: PropTypes.func.isRequired
 };

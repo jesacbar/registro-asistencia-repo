@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import LoginForm from './components/LoginForm'
 import TablaClasesAlumno from './components/TablaClasesAlumno';
 import TablaClasesProfesor from './components/TablaClasesProfesor';
+import MostrarCodigo from './components/MostrarCodigo';
 
 var request = require('request');
 
@@ -14,7 +15,8 @@ class App extends Component {
   state = {
     usuario: JSON.parse(localStorage.getItem("usuario")),
     token: localStorage.getItem("token"),
-    error: ''
+    error: '',
+    clase: null
   };
   
   identificarse = (id, password) => {
@@ -60,8 +62,16 @@ class App extends Component {
     localStorage.clear();
     this.setState({
         usuario: null,
-        token: null
+        token: null,
+        error: null,
+        clase: null
     })
+  };
+
+  mostrarCodigo = async (clase) => {
+    await this.setState({
+      clase: clase
+    });
   };
 
   render() {
@@ -105,11 +115,19 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === true) {
             return <div>
               <h1>Listado de clases</h1>
-              <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id}/>
+              <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id} mostrarCodigo={this.mostrarCodigo}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>
             </div>
+          } else {
+            return <Redirect to='/'/>;
+          }
+        }}>
+        </Route>
+        <Route exact path="/mostrarCodigo" render={() => {
+          if (this.state.usuario !== null && this.state.usuario.esProfesor === true && this.state.clase !== null) {
+            return <MostrarCodigo clase={this.state.clase}/>
           } else {
             return <Redirect to='/'/>;
           }

@@ -7,6 +7,7 @@ const auth = require("../middleware/auth");
 // Al hacer esta petición se generan varios alumnos y clases para pruebas
 // del sistema.
 router.get("/generarstub", async(req, res) => {
+    usuario0 = new Usuario({ id: "0", password: "123", nombre: "Terry Testing", esProfesor: true })
     usuario1 = new Usuario({ id: "00000000001", password: "123", nombre: "Edgar Fulano", esProfesor: true });
     usuario2 = new Usuario({ id: "00000000002", password: "123", nombre: "Pedro Asola", esProfesor: true });
     usuario3 = new Usuario({ id: "00000000003", password: "123", nombre: "Gilberto Borrego", esProfesor: true });
@@ -34,38 +35,45 @@ router.get("/generarstub", async(req, res) => {
                              esProfesor: false, 
                              clases: ["0001", "0002", "0003", "0004" ,"0005"] });
 
+    clase0 = new Clase({ id: "0000",
+                        nombre: "Proyecto integrador de Software",
+                        idProfesor: "0",
+                        aula: "AV1801",
+                        horaInicio: "13:00",
+                        horaFin: "15:00"});
     clase1 = new Clase({ id: "0001",
                         nombre: "Topico 1: Temas emergentes",
                         idProfesor: "00000000003",
                         aula: "AV1803",
-                        horaInicio: "07:00:00 a. m.",
-                        horaFin: "08:00:00 a. m."});
+                        horaInicio: "07:00",
+                        horaFin: "08:00"});
     clase2 = new Clase({ id: "0002",
                         nombre: "Metodologías ágiles",
                         idProfesor: "00000000004",
                         aula: "AV1802",
-                        horaInicio: "08:00:00 a. m.",
-                        horaFin: "09:00:00 a. m."});
+                        horaInicio: "08:00",
+                        horaFin: "09:00"});
     clase3 = new Clase({ id: "0003",
                         nombre: "Modelado 3D",
                         idProfesor: "00000000002",
                         aula: "AV702",
-                        horaInicio: "09:00:00 a. m.",
-                        horaFin: "10:00:00 a. m."});
+                        horaInicio: "09:00",
+                        horaFin: "10:00"});
     clase4 = new Clase({ id: "0004",
                         nombre: "Calidad de Software",
                         idProfesor: "00000000001",
                         aula: "LV1801",
-                        horaInicio: "10:00:00 a. m.",
-                        horaFin: "11:00:00 a. m."});
+                        horaInicio: "10:00",
+                        horaFin: "11:00"});
     clase5 = new Clase({ id: "0005",
                         nombre: "Topico 2: Introducción IoT",
                         idProfesor: "00000000003",
                         aula: "AV1804",
-                        horaInicio: "11:00:00 a. m.",
-                        horaFin: "12:00:00 p. m."});
+                        horaInicio: "11:00",
+                        horaFin: "12:00"});
 
     try {
+        await usuario0.save();
         await usuario1.save();
         await usuario2.save();
         await usuario3.save();
@@ -75,6 +83,7 @@ router.get("/generarstub", async(req, res) => {
         await usuario7.save();
         await usuario8.save();
         await usuario9.save();
+        await clase0.save();
         await clase1.save();
         await clase2.save();
         await clase3.save();
