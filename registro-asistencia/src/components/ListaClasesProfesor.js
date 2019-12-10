@@ -31,8 +31,6 @@ export default class ListaClasesProfesor extends Component {
                 this.setState({
                     clases: JSON.parse(body),
                 });
-                console.log(this.state.clases[0])
-                console.log(this.state.clases[1])
             }
         });
     };

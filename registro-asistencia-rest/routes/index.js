@@ -59,11 +59,10 @@ wsServer.on('request', function (request) {
                 console.log("Se generó un código de clase.");
                 console.log(codigo);
             }
-
-            conexion.sendUTF(clases.get(idClase).codigo);
+            conexion.sendUTF('codigo,' + clases.get(idClase).codigo);
             console.log("Se mandó código de clase.")
         } else {
-            conexion.sendUTF("Aún no es la hora de la clase");
+            conexion.sendUTF("codigo,Aún no es la hora de la clase");
             console.log("Se mandó notificación de que aún no es la hora de la clase.")
         };
 
@@ -85,14 +84,14 @@ generarCodigoTarea = schedule.scheduleJob('*/1 * * * *', function () {
             console.log("Clase: " + idClase + " Código: " + codigoNuevo);
             for (var [conexion, idClaseConexion] of conexiones) {
                 if (idClaseConexion === idClase) {
-                    conexion.sendUTF(codigoNuevo);
+                    conexion.sendUTF('codigo,' + codigoNuevo);
                     console.log(codigoNuevo);
                 };
             };
         } else {
             for (var [conexion, idClaseConexion] of conexiones) {
                 if (idClaseConexion === idClase) {
-                    conexion.sendUTF("Se acabó la hora de la clase");
+                    conexion.sendUTF("codigo,Se acabó la hora de la clase");
                     conexiones.delete(conexion);
                     conexion.close();
                 };
@@ -103,6 +102,25 @@ generarCodigoTarea = schedule.scheduleJob('*/1 * * * *', function () {
     };
 });
 
+// Regresa todas las asistencias de la clase en la fecha que 
+// que se le pase como parámetro. La fecha debe estar en formato
+// DD-MM-AAAA.
+router.get("/asistencias/:idClase/:fecha", async (req, res) => {
+    var idClase = req.params.idClase;
+    var fecha = moment(req.params.fecha, 'DD-MM-YYYY');
+    console.log(moment(fecha).subtract(2, 'hour').toString());
+    console.log(fecha.endOf('day').toString());
+    const listaAsistencias = await Asistencia.find(
+        {
+            idClase: idClase, fecha: { $lt: fecha.endOf('day'), $gt: moment(fecha).subtract(2, 'hour') }
+        }
+    );
+    res.send(listaAsistencias);    
+    console.log(listaAsistencias);
+});
+
+// Agrega la asistencia que se le pase en el cuerpo de la
+// petición.
 router.post('/asistencias', async (req, res) => {
     try {
         const asistencia = new Asistencia(req.body)
@@ -112,21 +130,6 @@ router.post('/asistencias', async (req, res) => {
     } catch (error) {
         res.status(400).send(error)
     }
-});
-
-router.get("/asistencias", async (req, res) => {
-    const listaAsistencias = await Asistencia.find();
-    res.send(listaAsistencias);
-    console.log(taco);
-});
-
-// Regresa todas las asistencias registradas de una clase.
-router.get("/asistencias/:idClase", async (req, res) => {
-
-});
-
-router.get("/asistencias/:idClase/:idAlumno", async (req, res) => {
-
 });
 
 module.exports = router;

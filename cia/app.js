@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const cors = require('cors');
 
 const indexRoutes = require("./routes/index");
 
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
+app.use(cors({origin:true,credentials: true}));
 
 // Rutas
 app.use("/", indexRoutes);
