@@ -98,7 +98,7 @@ class App extends Component {
         {/*Pantalla de listado de clases de alumno*/} 
         <Route exact path="/listadoClasesAlumno" render={() => {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === false) {
-            return <div>
+            return <div> 
           <h1>Listado de clases</h1>
               <TablaClasesAlumno token={this.state.token} clases={this.state.usuario.clases}/>
               <button onClick={this.cerrarSesion}>
@@ -116,7 +116,7 @@ class App extends Component {
             return <div>
               <h1>Listado de clases</h1>
               <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id} mostrarCodigo={this.mostrarCodigo}/>
-              <button onClick={this.cerrarSesion}>
+              <button className="cerrarsesion" onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>
             </div>
@@ -127,6 +127,14 @@ class App extends Component {
         </Route>
         <Route exact path="/mostrarCodigo" render={() => {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === true && this.state.clase !== null) {
+            return <MostrarCodigo clase={this.state.clase}/>
+          } else {
+            return <Redirect to='/'/>;
+          }
+        }}>
+        </Route>
+        <Route exact path="/registrarAsistencia" render={() => {
+          if (this.state.usuario !== null && this.state.usuario.esProfesor === false && this.state.clase !== null) {
             return <MostrarCodigo clase={this.state.clase}/>
           } else {
             return <Redirect to='/'/>;

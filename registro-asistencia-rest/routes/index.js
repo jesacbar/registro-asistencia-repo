@@ -85,7 +85,6 @@ generarCodigoTarea = schedule.scheduleJob('*/1 * * * *', function () {
             for (var [conexion, idClaseConexion] of conexiones) {
                 if (idClaseConexion === idClase) {
                     conexion.sendUTF('codigo,' + codigoNuevo);
-                    console.log(codigoNuevo);
                 };
             };
         } else {
@@ -108,27 +107,38 @@ generarCodigoTarea = schedule.scheduleJob('*/1 * * * *', function () {
 router.get("/asistencias/:idClase/:fecha", async (req, res) => {
     var idClase = req.params.idClase;
     var fecha = moment(req.params.fecha, 'DD-MM-YYYY');
-    console.log(moment(fecha).subtract(2, 'hour').toString());
-    console.log(fecha.endOf('day').toString());
     const listaAsistencias = await Asistencia.find(
         {
-            idClase: idClase, fecha: { $lt: fecha.endOf('day'), $gt: moment(fecha).subtract(2, 'hour') }
+            idClase: idClase, fecha: { $gt: fecha, $lt: moment(fecha).add(1, 'day').startOf('day') }
         }
     );
     res.send(listaAsistencias);    
-    console.log(listaAsistencias);
 });
 
 // Agrega la asistencia que se le pase en el cuerpo de la
 // petición.
 router.post('/asistencias', async (req, res) => {
-    try {
-        const asistencia = new Asistencia(req.body)
-        console.log(asistencia);
-        await asistencia.save()
-        res.status(201).send({ asistencia })
-    } catch (error) {
-        res.status(400).send(error)
+    var idClase = req.body.idClase;
+    var idAlumno = req.body.idAlumno;
+    var fecha = moment(req.body.fecha);
+    console.log("idClase:",idClase,"idAlumno",idAlumno,"fecha",fecha);
+    var asistencia = await Asistencia.findOne(
+        {
+            idClase: idClase, idAlumno: idAlumno, fecha: { $gt: moment(fecha).startOf('day'), $lt: moment(fecha).add(1, 'day').startOf('day') }
+        }
+    );
+    if (asistencia === null) {
+        try {
+            const asistencia = new Asistencia(req.body)
+            console.log("<Registro de asistencia exitoso>");
+            await asistencia.save()
+            res.status(201).send({ asistencia })
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    } else {
+        console.log("<No se hizo el registro de asistencia porque ya existía uno de ese alumno>");
+        res.status(201).send();
     }
 });
 

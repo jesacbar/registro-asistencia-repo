@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ListaAsistencias from './ListaAsistencias';
-//import ListadoAsistencia from './ListadoAsistencia';
 
 var request = require('request');
 const moment = require('moment');
+var ws;
 
 export default class MostrarCodigo extends Component {
 
@@ -26,10 +26,11 @@ export default class MostrarCodigo extends Component {
 
         request(options, async (error, response, body) => {
             if (!error && response.statusCode === 200) {
-                this.setState({
-                    asistencias: JSON.parse(body),
-                });
-                console.log("Asistencias:", body)
+                if (body !== "[]") {
+                    this.setState({
+                        asistencias: JSON.parse(body),
+                    });
+                }
             }
         });
     };
@@ -74,7 +75,9 @@ export default class MostrarCodigo extends Component {
     };
 
     componentDidMount() {
-        var ws = new WebSocket('ws://localhost:7000/');
+        ws = new WebSocket('ws://localhost:7000/');
+
+        this.obtenerAsistencias();
 
         ws.onopen = () => {
             console.log('Cliente WebSocket conectado');
@@ -120,7 +123,7 @@ export default class MostrarCodigo extends Component {
                         </tbody>
                     </table>
                     <Link to="/listadoClasesProfesor">
-                        <button>Regresar al listado de clases</button>
+                        <button onClick={(e) => ws.close()}>Regresar al listado de clases</button>
                     </Link>
                 </div>
             );
@@ -128,7 +131,7 @@ export default class MostrarCodigo extends Component {
             return <div>
                 <h1 style={{ textAlign: "center" }}>{this.state.codigo}</h1>
                 <Link to="/listadoClasesProfesor">
-                    <button>Regresar al listado de clases</button>
+                    <button onClick={(e) => ws.close()}>Regresar al listado de clases</button>
                 </Link>
             </div>
         }
