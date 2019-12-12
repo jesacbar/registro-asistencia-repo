@@ -1,27 +1,81 @@
-/* Bordered form */
-form {
-  border: 3px solid #f1f1f1;
+h1{
+  font-size: 50px;
+  text-align: center;
+  background: #106DB2;
+  position: sticky;
+  color: white;
+  left: 400px;
+  width: 50%;
 }
-
+table{
+  background-color:black;
+  border-collapse: collapse;
+  font-size: 20px;
+}
+table th{
+  color: white;
+}
+table td{
+  padding: 20px;
+  color: white;
+}
+table tr:hover{
+  background: mediumblue;
+}
+table td:hover{
+  background: darkblue;
+}
+.alerta{
+  position: relative;
+  left: 420px;
+  background-color: black;
+  width: 30%;
+}
 /* Full-width inputs */
 input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
+  width: 15%;
+  position: relative;
+  padding: 10px 10px;
+  left: 500px;
 }
+button:hover{
+  background: green;
+}
+.Asistencia:hover{
+  background: green;
+}
+.Asistencia{
+  background-color: #106DB2;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+.enviar{
+  background-color: #106DB2;
+  color: white;
+  position: relative;
+  left: 480px;
+  padding: 20px 20px;
+  margin: 7px 0;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+}
+
 
 /* Set a style for all buttons */
 button {
   background-color: #106DB2;
   color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
+  position: sticky;
+  left: 600px;
+  padding: 20px 20px;
+  margin: 7px 0;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: 20%;
 }
 
 /* Add a hover effect for buttons */
