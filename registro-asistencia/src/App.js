@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm'
 import TablaClasesAlumno from './components/TablaClasesAlumno';
 import TablaClasesProfesor from './components/TablaClasesProfesor';
 import MostrarCodigo from './components/MostrarCodigo';
+import RegistrarAsistencia from './components/RegistrarAsistencia';
 
 var request = require('request');
 
@@ -39,7 +40,7 @@ class App extends Component {
             }
         }
     );
-  }
+  };
 
   // Cierra la sesión del usuario tanto en la página del CIA
   // como en el sistema registro de asistencias.
@@ -68,7 +69,7 @@ class App extends Component {
     })
   };
 
-  mostrarCodigo = async (clase) => {
+  setClase = async (clase) => {
     await this.setState({
       clase: clase
     });
@@ -100,7 +101,7 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === false) {
             return <div> 
           <h1>Listado de clases</h1>
-              <TablaClasesAlumno token={this.state.token} clases={this.state.usuario.clases}/>
+              <TablaClasesAlumno token={this.state.token} clases={this.state.usuario.clases} setClase={this.setClase}/>
               <button onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>
@@ -115,7 +116,7 @@ class App extends Component {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === true) {
             return <div>
               <h1>Listado de clases</h1>
-              <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id} mostrarCodigo={this.mostrarCodigo}/>
+              <TablaClasesProfesor token={this.state.token} id={this.state.usuario.id} setClase={this.setClase}/>
               <button className="cerrarsesion" onClick={this.cerrarSesion}>
                     Cerrar sesión
               </button>
@@ -135,7 +136,7 @@ class App extends Component {
         </Route>
         <Route exact path="/registrarAsistencia" render={() => {
           if (this.state.usuario !== null && this.state.usuario.esProfesor === false && this.state.clase !== null) {
-            return <MostrarCodigo clase={this.state.clase}/>
+            return <RegistrarAsistencia clase={this.state.clase} usuario={this.state.usuario}/>
           } else {
             return <Redirect to='/'/>;
           }

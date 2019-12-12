@@ -8,8 +8,8 @@ export default class ListadoClaseProfesor extends Component {
         mostrarCodigo: false
     };
 
-    mostrarCodigoPre = async () => {
-        this.props.mostrarCodigo(this.props.clase);
+    mostrarCodigo = async () => {
+        this.props.setClase(this.props.clase);
         await this.setState({
             mostrarCodigo: true
         });
@@ -22,7 +22,7 @@ export default class ListadoClaseProfesor extends Component {
                 <td>{this.props.clase.aula}</td>
                 <td>{this.props.clase.horaInicio}</td>
                 <td>{this.props.clase.horaFin}</td>
-                <td><button onClick={(e) => this.mostrarCodigoPre()}>
+                <td><button onClick={(e) => this.mostrarCodigo()}>
                         Generar código
                 </button></td>
             </tr>
@@ -34,5 +34,5 @@ export default class ListadoClaseProfesor extends Component {
 
 ListadoClaseProfesor.propTypes = {
     clase: PropTypes.object.isRequired,
-    mostrarCodigo: PropTypes.func.isRequired
+    setClase: PropTypes.func.isRequired
 };

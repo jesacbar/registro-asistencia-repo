@@ -8,8 +8,8 @@ export default class LoginForm extends Component {
     };
 
     onSubmit = e => {
-        this.props.identificarse(this.state.id, this.state.password);
         e.preventDefault();
+        this.props.identificarse(this.state.id, this.state.password);
     };
 
     onChange = e => {

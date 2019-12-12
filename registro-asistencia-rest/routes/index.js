@@ -115,6 +115,18 @@ router.get("/asistencias/:idClase/:fecha", async (req, res) => {
     res.send(listaAsistencias);    
 });
 
+router.get("/asistencias/:idClase/:fecha/:idAlumno", async (req, res) => {
+    var idClase = req.params.idClase;
+    var idAlumno = req.params.idAlumno;
+    var fecha = moment(req.params.fecha, 'DD-MM-YYYY');
+    const asistencia = await Asistencia.findOne(
+        {
+            idClase: idClase, idAlumno: idAlumno, fecha: { $gt: fecha, $lt: moment(fecha).add(1, 'day').startOf('day') }
+        }
+    );
+    res.send(asistencia);    
+});
+
 // Agrega la asistencia que se le pase en el cuerpo de la
 // petición.
 router.post('/asistencias', async (req, res) => {
@@ -139,6 +151,45 @@ router.post('/asistencias', async (req, res) => {
     } else {
         console.log("<No se hizo el registro de asistencia porque ya existía uno de ese alumno>");
         res.status(201).send();
+    }
+});
+
+router.put('/asistencias', async (req, res) => {
+    var idClase = req.body.idClase;
+    var idAlumno = req.body.idAlumno;
+    var fecha = moment(req.body.fecha);
+    var estado = req.body.estado;
+    var codigo = req.body.codigo;
+    console.log("idClase:",idClase,"idAlumno:",idAlumno,"fecha:",fecha,"estado:",estado);
+    // Si se quiere cambiar el estado a "Asistencia", verificar
+    // el código de clase.
+    if (estado === "Asistencia") {
+        console.log("codigo",codigo,"codigo de la clase registrado:",clases.get(idClase).codigo)
+        if (codigo !== clases.get(idClase).codigo) {
+            console.log("<Código de clase incorrecto, no se hizo la actualización del registro>")
+            res.status(400).send("Codigo de clase incorrecto.")
+            return;
+        }
+    }
+    var asistencia = await Asistencia.findOne(
+        {
+            idClase: idClase, idAlumno: idAlumno, fecha: { $gt: moment(fecha).startOf('day'), $lt: moment(fecha).add(1, 'day').startOf('day') }
+        }
+    );
+    if (asistencia !== null) {
+        try {
+            asistencia.fecha = fecha;
+            asistencia.estado = estado;
+            await asistencia.save()
+            console.log("<Actualización de registro de asistencia exitoso>");
+            res.status(200).send({ asistencia })
+            wsServer.broadcastUTF("actualizacion");
+        } catch (error) {
+            res.status(400).send(error)
+        }
+    } else {
+        console.log("<No se encontró el registro de asistencias que se quiere actualizar>");
+        res.status(400).send();
     }
 });
 

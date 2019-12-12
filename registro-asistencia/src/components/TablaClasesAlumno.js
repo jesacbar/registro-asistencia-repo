@@ -19,7 +19,7 @@ export default class TablaClasesAlumno extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <ListaClasesAlumno token={this.props.token} clases={this.props.clases}/>
+                        <ListaClasesAlumno token={this.props.token} clases={this.props.clases} setClase={this.props.setClase}/>
                     </tbody>
                 </table>
             </div>
@@ -28,5 +28,6 @@ export default class TablaClasesAlumno extends Component {
 };
 
 TablaClasesAlumno.propTypes = {
-    clases: PropTypes.array.isRequired
+    clases: PropTypes.array.isRequired,
+    setClase: PropTypes.func.isRequired
 };

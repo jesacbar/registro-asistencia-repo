@@ -7,12 +7,13 @@ export default class ListaClasesAlumno extends Component {
 
     render() {
         return this.props.clases.map(clase =>
-            <ListadoClaseAlumno key={clase} token={this.props.token} clase={clase} />
+            <ListadoClaseAlumno key={clase} token={this.props.token} clase={clase} setClase={this.props.setClase}/>
         );
     };
 };
 
 ListaClasesAlumno.propTypes = {
     token: PropTypes.string.isRequired,
-    clases: PropTypes.array.isRequired
+    clases: PropTypes.array.isRequired,
+    setClase: PropTypes.func.isRequired
 };

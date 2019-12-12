@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 
 var request = require('request');
 
 export default class ListadoClaseAlumno extends Component {
 
     state = {
-        clase: null
+        clase: null,
+        registrarAsistencia: false
     }
 
     constructor(props) {
@@ -33,8 +35,16 @@ export default class ListadoClaseAlumno extends Component {
         });
     };
 
+    registrarAsistencia = async () => {
+        this.props.setClase(this.state.clase);
+        await this.setState({
+            registrarAsistencia: true
+        });
+    };
+
     render() {
-        return this.state.clase === null ? 
+        if (!this.state.registrarAsistencia) {
+            return this.state.clase === null ? 
             <tr>
                 <td>Cargando</td>
                 <td>Cargando</td>
@@ -48,12 +58,16 @@ export default class ListadoClaseAlumno extends Component {
                 <td>{this.state.clase.aula}</td>
                 <td>{this.state.clase.horaInicio}</td>
                 <td>{this.state.clase.horaFin}</td>
-                <td><button>Registrar asistencia</button></td>
+                <td><button onClick={(e) => this.registrarAsistencia()}>Registrar asistencia</button></td>
             </tr>
+        } else {
+            return <Redirect to='/registrarAsistencia/'/>;
+        };
     };
 };
 
 ListadoClaseAlumno.propTypes = {
     token: PropTypes.string.isRequired,
-    clase: PropTypes.string.isRequired
+    clase: PropTypes.string.isRequired,
+    setClase: PropTypes.func.isRequired
 };
