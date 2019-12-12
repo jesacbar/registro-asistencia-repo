@@ -22,7 +22,7 @@ export default class ListadoClaseProfesor extends Component {
                 <td>{this.props.clase.aula}</td>
                 <td>{this.props.clase.horaInicio}</td>
                 <td>{this.props.clase.horaFin}</td>
-                <td><button onClick={(e) => this.mostrarCodigo()}>
+                <td><button div class ="Asistencia" onClick={(e) => this.mostrarCodigo()}>
                         Generar código
                 </button></td>
             </tr>

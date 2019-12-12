@@ -80,7 +80,7 @@ export default class RegistrarAsistencia extends Component {
                     if (body !== "") {
                         if (JSON.parse(body).estado === "Asistencia") {
                             this.setState({
-                                mensaje: "Su asistencia ya está registrada"
+                                mensaje: <h1>Su asistencia ya está registrada</h1>
                             });
                         } else {
                             var htmlInputCodigo = document.getElementById("codigo");
@@ -93,14 +93,14 @@ export default class RegistrarAsistencia extends Component {
                         }
                     } else {
                         this.setState({
-                            mensaje: "Usted no forma parte de la clase"
+                            mensaje: <h1>Usted no forma parte de la clase</h1>
                         });
                     };
                 };
             });
         } else {
             this.setState({
-                mensaje: "Aún no es la hora de la clase"
+                mensaje: <h1>Aún no es la hora de la clase</h1>
             });
         }
     }
@@ -116,7 +116,7 @@ export default class RegistrarAsistencia extends Component {
         }
         else if (!this.state.asistenciaRegistrada) {
             return <div>
-                <h3>Registrar asistencia</h3>
+                <h1>Registrar asistencia</h1>
                 <div className="container">
                     <h3 style={{ textAlign: "center" }}>Ingrese el código de la clase</h3>
                     <form onSubmit={this.onSubmit}>

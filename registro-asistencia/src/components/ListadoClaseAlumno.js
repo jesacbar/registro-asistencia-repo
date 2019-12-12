@@ -58,7 +58,7 @@ export default class ListadoClaseAlumno extends Component {
                 <td>{this.state.clase.aula}</td>
                 <td>{this.state.clase.horaInicio}</td>
                 <td>{this.state.clase.horaFin}</td>
-                <td><button onClick={(e) => this.registrarAsistencia()}>Registrar asistencia</button></td>
+                <td><button div class="Asistencia" onClick={(e) => this.registrarAsistencia()}>Registrar asistencia</button></td>
             </tr>
         } else {
             return <Redirect to='/registrarAsistencia/'/>;

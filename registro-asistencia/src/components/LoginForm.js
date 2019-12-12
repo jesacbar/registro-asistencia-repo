@@ -40,7 +40,7 @@ export default class LoginForm extends Component {
         return (
             <div className="container">
                 <form onSubmit={this.onSubmit}>
-                    <p><font color="red">{this.props.error}</font></p>
+                    <p div class="alerta" ><font color="red">{this.props.error}</font></p>
                     <input
                         id="id"
                         type="text"
@@ -63,7 +63,7 @@ export default class LoginForm extends Component {
                     />
                     <br />
                     <br />
-                    <button type="submit">
+                    <button div class="enviar" type="submit">
                         Enviar
                 </button>
                 </form>
