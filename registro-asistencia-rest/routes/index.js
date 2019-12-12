@@ -56,6 +56,7 @@ wsServer.on('request', function (request) {
                     codigo: codigo
                 };
                 clases.set(idClase, clase);
+                conexion.sendUTF("registrar-iniciales");
                 console.log("Se generó un código de clase.");
                 console.log(codigo);
             }
